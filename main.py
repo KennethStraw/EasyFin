@@ -1,18 +1,58 @@
 from helpers.nameHandler import *
 from tkinter import *
-from tkinter import tkk
+from tkinter import ttk
 
-# Need to load our data first. From an excel file
-# The format of our excel sheet is : 
-# Each Col Represents a Week of income. We need to determine this first. 
+class MainGui:
+    def __init__(self, root):
+        
+        # Set title of window
+        root.title("EasyFin")
 
-# Firstly need to make my weekly income to track it
+        # Mainframe is the opening frame, thats inside the root. Heres our setup
+        mainframe = ttk.Frame(root, padding="100")
+        mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
+        root.columnconfigure(0, weight=1)
+        root.rowconfigure(0, weight=1)
 
-welcomeString = "View " + getCurrentMonth() + " finances?"
+        CURRENTMONTH = getCurrentMonth()
+        self.curMonth = StringVar()
+        self.curMonth.set(CURRENTMONTH)
 
-# Setup initial dark-mode variables
-customtkinter.set_appearance_mode("Dark"); 
-customtkinter.set_default_color_theme("dark-blue")
+        # If I wanted a label, say for the total costs for the month?
+        self.welcomeString = StringVar()
+        self.welcomeString.set("View " + CURRENTMONTH + " finances?")
+        ttk.Label(mainframe, textvariable=self.welcomeString).grid(column=0, row=0)
 
-def selectMonth():
-    print("Selected this month")
+        # Heres how we can create a Text Entry box that will set the month variable.
+        # We set its parent to mainframe, and set where it will appear
+        self.month = StringVar()
+        month_entry = ttk.Combobox(mainframe, textvariable=self.month)
+        month_entry.bind('<<ComboboxSelected>>', self.setMonth)
+        month_entry['values'] = ('January', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December')
+        month_entry.state(["readonly"])
+
+        self.selectMonth = StringVar()
+        self.selectMonth.set("Select " + CURRENTMONTH)
+        ttk.Button(mainframe, textvariable=self.selectMonth, command=self.tester).grid(column=0, row=4, sticky=(N,E,S,W))
+
+        for child in mainframe.winfo_children():
+            child.grid_configure(padx=5,pady=5)
+        root.bind("<Return>", self.tester)
+    
+    def tester(self, *args):
+        try:
+            print("Clicked Button")
+        except ValueError:
+            pass
+    def setMonth(self, *args):
+        try:
+            CURRENTMONTH = self.month.get()
+            self.curMonth.set(CURRENTMONTH)
+            self.welcomeString.set("View " + CURRENTMONTH + " finances?")
+            self.selectMonth.set("Select " + CURRENTMONTH)
+        except ValueError:
+            pass
+
+root = Tk()
+MainGui(root)
+root.mainloop()
