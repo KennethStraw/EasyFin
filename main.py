@@ -1,20 +1,37 @@
 from helpers.nameHandler import *
-from tkinter import *
+import tkinter as tk
 from tkinter import ttk
-from tkcalendar import DateEntry
+from tkinter.messagebox import showerror
 
-class testGUI:
-    def __init__(self,root):
-        self.root = root
-        print("Created instance of test")
-    mainframe = ttk.Frame(root, padding="100")
-    mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
-    ttk.Label(mainframe, text="Helloyall").grid(column=0, row=0)
+class ConverterFrame(ttk.Frame):
+    def __init__(self, container):
+        super().__init__(container)
+        # field options
+        options = {'padx': 5, 'pady': 5}
+
+        # temperature label
+        self.temperature_label = ttk.Label(self, text='Fahrenheit')
+        self.temperature_label.grid(column=0, row=0, sticky=tk.W, **options)
+        self.grid(padx=10, pady=10, sticky=tk.NSEW)
+
+class App(tk.Tk):
+    def __init__(self):
+        super().__init__()
+
+        self.title('Temperature Converter')
+        self.geometry('300x70')
+        self.resizable(False, False)
 
 
-class MasterGUI:
-    def __init__(self, root):
-        print("Created instance of Master")
+if __name__ == "__main__":
+    app = App()
+    ConverterFrame(app)
+    app.mainloop()
+
+
+# class MasterGUI:
+#     def __init__(self, root):
+#         print("Created instance of Master")
     #     # Set title of window
     #     root.title("EasyFin")
         
@@ -64,6 +81,6 @@ class MasterGUI:
     #     except ValueError:
     #         pass
 
-root = Tk()
-MasterGUI(root)
-root.mainloop()
+# root = Tk()
+# MasterGUI(root)
+# root.mainloop()
